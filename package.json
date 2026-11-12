@@ -1,0 +1,12 @@
+{
+  "name": "captura-resumos-pro",
+  "version": "2.15.0",
+  "private": true,
+  "description": "Captura transcrições e questões de qualquer página, com quiz, Anki, OCR e resumos Gemini.",
+  "scripts": {
+    "test": "node tests/extract.test.js && node tests/storage.test.js && node tests/bg-courses.test.js && node tests/bg-manual.test.js && node tests/bg-name.test.js && node tests/bg-ocr.test.js && node tests/manual-capture.test.js && node tests/options-filter.test.js && node tests/region-capture.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}

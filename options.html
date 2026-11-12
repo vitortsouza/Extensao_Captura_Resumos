@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Configurações - Captura e Resumos Pro</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #10b981;
+      --success-hover: #059669;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --surface: #ffffff;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --surface-hover: #f1f5f9;
+    }
+
+    [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #34d399;
+      --success-hover: #10b981;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --danger-hover: #ef4444;
+      --surface: #1e293b;
+      --background: #0f172a;
+      --border: #334155;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --surface-hover: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 32px 16px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    .header { margin-bottom: 24px; display: flex; align-items: center; gap: 14px; justify-content: space-between; }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .header-icon {
+      width: 48px; height: 48px; background: var(--primary); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; color: white;
+      font-weight: bold; font-size: 26px; box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+
+    .card {
+      background: var(--surface); border-radius: 12px; border: 1px solid var(--border);
+      padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .card-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .card-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 18px; }
+
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #334155; }
+    [data-theme="dark"] label { color: #cbd5e1; }
+
+    input[type="text"], input[type="password"], input[type="number"], select, textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 14px; background: #fdfdfd; color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
+    }
+
+    [data-theme="dark"] input[type="text"], [data-theme="dark"] input[type="password"],
+    [data-theme="dark"] input[type="number"], [data-theme="dark"] select, [data-theme="dark"] textarea {
+      background: #0f172a; border-color: #334155; color: #f1f5f9;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+
+    input[type="checkbox"] { accent-color: var(--primary); }
+    .help-text { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      cursor: pointer; border: none; transition: background-color 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: var(--success-hover); }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: var(--danger-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--surface-hover); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .flex-gap { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+    .preview-box {
+      background: var(--surface-hover); border: 1px dashed var(--border); border-radius: 8px;
+      padding: 14px; font-family: monospace; font-size: 12px; max-height: 280px;
+      overflow-y: auto; white-space: pre-wrap; word-break: break-word; color: var(--text); margin-top: 12px;
+    }
+
+    .alert { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+    .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+    .alert-info { background: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+    .alert-warning { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    [data-theme="dark"] .alert-success { background: #14532d; color: #86efac; border-color: #16a34a; }
+    [data-theme="dark"] .alert-danger { background: #7f1d1d; color: #fca5a5; border-color: #dc2626; }
+    [data-theme="dark"] .alert-info { background: #164e63; color: #93c5fd; border-color: #0891b2; }
+    [data-theme="dark"] .alert-warning { background: #78350f; color: #fcd34d; border-color: #b45309; }
+
+    .stat-bar { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 10px; font-size: 13px; color: var(--text-muted); align-items: center; }
+    .stat-item b { color: var(--text); }
+
+    .model-management { background: var(--surface-hover); border-radius: 8px; padding: 12px; margin-top: 10px; }
+    .badge-key { background: var(--border); padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; color: var(--text); }
+
+    .theme-toggle {
+      background: var(--surface-hover); border: 1px solid var(--border); color: var(--text);
+      width: 40px; height: 40px; border-radius: 10px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .theme-toggle:hover { background: var(--border); }
+
+    .filters { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin: 14px 0; }
+    @media (max-width: 640px) { .filters { grid-template-columns: 1fr; } }
+
+    .item-list { display: flex; flex-direction: column; gap: 10px; max-height: 460px; overflow-y: auto; padding-right: 4px; }
+    .item-card {
+      border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px;
+      background: var(--surface-hover); position: relative;
+    }
+    [data-theme="dark"] .item-card { background: #0f172a; }
+    .item-card h4 { margin: 0 0 6px 0; font-size: 14px; color: var(--primary); }
+    .item-card .meta { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+    .item-card .question-text { font-size: 13px; margin-bottom: 6px; }
+    .item-card .answer { font-size: 12px; color: var(--success); font-weight: 600; margin-top: 4px; }
+    .item-card .explanation { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .item-card .item-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; }
+    .icon-btn {
+      background: transparent; border: 1px solid var(--border); border-radius: 6px;
+      cursor: pointer; padding: 2px 7px; font-size: 12px; color: var(--text-muted);
+    }
+    .icon-btn:hover { color: var(--danger); border-color: var(--danger); }
+    .empty-state { font-size: 13px; color: var(--text-muted); padding: 16px; text-align: center; border: 1px dashed var(--border); border-radius: 8px; }
+
+    .quiz-box { margin-top: 14px; }
+    .quiz-progress { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; display: flex; justify-content: space-between; }
+    .quiz-question { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+    .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-option {
+      text-align: left; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); cursor: pointer; font-size: 13px; line-height: 1.4;
+    }
+    .quiz-option:hover { border-color: var(--primary); }
+    .quiz-option.correct { border-color: var(--success); background: rgba(16,185,129,0.14); }
+    .quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,0.14); }
+    .quiz-option:disabled { cursor: default; }
+    .quiz-feedback { margin-top: 12px; font-size: 13px; padding: 10px 12px; border-radius: 8px; display: none; }
+    .quiz-feedback.ok { display: block; background: rgba(16,185,129,0.14); border: 1px solid var(--success); }
+    .quiz-feedback.no { display: block; background: rgba(239,68,68,0.14); border: 1px solid var(--danger); }
+    .quiz-score { font-size: 14px; font-weight: 700; margin-top: 12px; }
+
+    .token-box { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+    .token-box b { color: var(--text); }
+    .token-box.warn b { color: var(--danger); }
+
+    .section-sep { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+    .switch { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; }
+
+    .tabs {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; padding: 6px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .tab-btn {
+      flex: 1 1 auto; min-width: 120px; padding: 10px 14px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text-muted); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: background-color 0.2s, color 0.2s;
+    }
+    .tab-btn:hover { background: var(--surface-hover); color: var(--text); }
+    .tab-btn.active { background: var(--primary); color: #fff; }
+    .tab-panel[hidden] { display: none !important; }
+    .help-details summary { cursor: pointer; font-size: 15px; font-weight: 700; }
+    .help-details[open] summary { margin-bottom: 10px; }
+    .danger-card { border-color: var(--danger); }
+    .danger-card .card-title { color: var(--danger); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="header-left">
+        <div class="header-icon">A</div>
+        <div>
+          <h1 style="font-size: 22px; font-weight: 800;">Captura e Resumos Pro &amp; Gemini</h1>
+          <p style="font-size: 14px; color: var(--text-muted);">
+            <span class="badge-key">Alt + C</span> transcrição &nbsp;|&nbsp;
+            <span class="badge-key">Alt + Q</span> questão &nbsp;|&nbsp;
+            <span class="badge-key">Alt + S</span> seleção &nbsp;|&nbsp;
+            <span class="badge-key">Alt + R</span> região
+          </p>
+        </div>
+      </div>
+      <button id="btnToggleTheme" class="theme-toggle" title="Alternar tema claro/escuro">🌙</button>
+    </div>
+
+    <div id="globalAlert" class="alert"></div>
+
+    <nav class="tabs" role="tablist" aria-label="Seções das opções">
+      <button class="tab-btn active" type="button" role="tab" data-tab="content" aria-selected="true">📚 Conteúdo</button>
+      <button class="tab-btn" type="button" role="tab" data-tab="questions" aria-selected="false">❓ Questões</button>
+      <button class="tab-btn" type="button" role="tab" data-tab="ai" aria-selected="false">✨ Resumos &amp; IA</button>
+      <button class="tab-btn" type="button" role="tab" data-tab="settings" aria-selected="false">⚙️ Configurações</button>
+    </nav>
+
+    <div class="tab-panel" data-tab-panel="content">
+
+    <!-- 0. CAPTURA MANUAL -->
+    <details class="card help-details">
+      <summary>🖱️ Como capturar em qualquer página</summary>
+      <div class="card-desc" style="margin-top: 12px;">
+        Selecione um texto e use o botão direito → <b>Salvar seleção como transcrição</b> ou <b>Salvar seleção como questão</b>, ou pressione <b>Alt + S</b>.
+        Para capturar uma área da tela, use o botão direito → <b>Capturar região da página</b> ou <b>Alt + R</b>; o texto é extraído do DOM da região selecionada.
+        Se a área for uma imagem (ou não tiver texto selecionável), use <b>📷 OCR da região</b> no painel para transcrever com Gemini Vision.
+        O curso padrão é o título da página e pode ser alterado no painel. Em questões, informe as alternativas uma por linha (com ou sem <b>A)</b>, <b>1)</b> ou <b>I)</b>) e marque a correta com <b>*</b>.
+      </div>
+    </details>
+
+    <!-- 1. TRANSCRIÇÕES -->
+    <div class="card">
+      <div class="card-title">📝 Transcrições Acumuladas</div>
+      <div class="card-desc">
+        Ao clicar no ícone da extensão ou pressionar <b>Alt + C</b> em uma página de aula compatível, o texto é copiado e acumulado abaixo. O download só é feito quando você desejar.
+      </div>
+
+      <div class="stat-bar">
+        <div class="stat-item">Aulas acumuladas: <b id="countLessons">0</b></div>
+        <div class="stat-item">Cursos: <b id="countCourses">0</b></div>
+        <div class="stat-item">Tamanho do texto: <b id="sizeLessons">0 KB</b></div>
+        <div class="stat-item">Uso do storage: <b id="storageUsage">0%</b></div>
+        <div class="stat-item" id="storageMode">—</div>
+      </div>
+
+      <div class="filters">
+        <input type="text" id="transcriptSearch" placeholder="🔎 Buscar nas transcrições...">
+        <select id="transcriptCourseFilter"><option value="">Todos os cursos</option></select>
+      </div>
+
+      <div class="preview-box" id="rawPreview">Nenhuma transcrição acumulada ainda. Acesse uma página de aula compatível e pressione Alt + C ou clique no ícone!</div>
+
+      <div class="form-group" style="margin-top: 18px;">
+        <label for="editRaw">✏️ Editar Transcrições Acumuladas:</label>
+        <div class="help-text" style="margin-bottom: 8px;">Cada bloco começa com [Titulo]. Alterações no texto bruto não reescrevem a estrutura por curso.</div>
+        <textarea id="editRaw" rows="7" style="font-family: monospace; font-size: 12px;" placeholder="As transcrições acumuladas aparecerão aqui para edição..."></textarea>
+        <div class="flex-gap" style="margin-top: 8px;">
+          <button id="btnSaveRawEdit" class="btn btn-success btn-sm">💾 Salvar Edição</button>
+          <button id="btnResetRaw" class="btn btn-outline btn-sm">🔄 Recarregar</button>
+        </div>
+      </div>
+
+      <hr class="section-sep">
+
+      <div class="grid2">
+        <div class="form-group" style="margin: 0;">
+          <label for="courseSelect">Curso para o documento consolidado:</label>
+          <select id="courseSelect">
+            <option value="">Todos os cursos</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin: 0; display: flex; align-items: flex-end;">
+          <button id="btnDownloadCourse" class="btn btn-primary" style="width: 100%;">📚 Baixar documento consolidado (.MD)</button>
+        </div>
+      </div>
+      <div class="help-text">O documento reúne sumário, transcrições, questões, respostas e resumos do curso selecionado (ou de todos).</div>
+
+      <div class="flex-gap" style="margin-top: 12px;">
+        <button id="btnDeleteCourse" class="btn btn-danger btn-sm">🗑️ Remover curso selecionado</button>
+        <label class="switch">
+          <input type="checkbox" id="deleteCourseCascade" checked>
+          <span>Apagar também as questões e os resumos desse curso</span>
+        </label>
+      </div>
+
+      <div class="flex-gap" style="margin-top: 18px;">
+        <button id="btnDownloadTxt" class="btn btn-primary">⬇️ Baixar .TXT</button>
+        <button id="btnDownloadMd" class="btn btn-outline" style="font-weight: 700;">📑 Baixar Markdown (.MD)</button>
+        <button id="btnClearRaw" class="btn btn-danger">🗑️ Limpar Transcrições</button>
+      </div>
+    </div>
+
+    <!-- 1b. GERENCIAR CURSOS -->
+    <div class="card">
+      <div class="card-title">🗂️ Gerenciar cursos</div>
+      <div class="card-desc">
+        Renomeie cursos, una duplicados de títulos de página diferentes e normalize nomes como <code>Course: ...</code> ou <code>... at main · usuario/repo</code>.
+      </div>
+      <div id="courseManagerList" class="item-list"></div>
+      <div class="grid2" style="margin-top: 14px;">
+        <div class="form-group" style="margin: 0;">
+          <label for="mergeSource">Curso de origem</label>
+          <select id="mergeSource"></select>
+        </div>
+        <div class="form-group" style="margin: 0;">
+          <label for="mergeTarget">Curso de destino</label>
+          <select id="mergeTarget"></select>
+        </div>
+      </div>
+      <div class="flex-gap" style="margin-top: 12px;">
+        <button id="btnMergeCourses" class="btn btn-outline btn-sm">🔀 Unir cursos</button>
+        <button id="btnNormalizeCourses" class="btn btn-primary btn-sm">✨ Normalizar nomes e unir duplicados</button>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="tab-panel" data-tab-panel="questions" hidden>
+
+    <!-- 2. QUESTÕES -->
+    <div class="card">
+      <div class="card-title">❓ Questões Capturadas</div>
+      <div class="card-desc">
+        Capture questões com <b>Alt + Q</b>. Use a busca e o filtro por curso para revisar, apagar individualmente ou gerar material de estudo.
+      </div>
+
+      <div class="stat-bar">
+        <div class="stat-item">Questões: <b id="countQuestions">0</b></div>
+        <label class="switch" style="margin-left: auto;">
+          <input type="checkbox" id="questionAutoCapture">
+          <span><b>Captura automática de questões</b></span>
+        </label>
+      </div>
+      <div class="help-text" style="margin-bottom: 12px;">Desativada por padrão para não interferir nos cliques da página. Use Alt + Q para capturar manualmente.</div>
+
+      <div class="filters">
+        <input type="text" id="questionSearch" placeholder="🔎 Buscar por pergunta, aula ou curso...">
+        <select id="questionCourseFilter"><option value="">Todos os cursos</option></select>
+      </div>
+
+      <div class="item-list" id="questionsList">
+        <div class="empty-state">Nenhuma questão capturada ainda. Acesse uma página com questões e pressione Alt + Q ou use Alt + S!</div>
+      </div>
+
+      <div class="flex-gap" style="margin-top: 18px;">
+        <button id="btnDownloadQuestionsTxt" class="btn btn-primary">⬇️ Questões .TXT</button>
+        <button id="btnDownloadQuestionsMd" class="btn btn-outline" style="font-weight: 700;">📑 Questões .MD</button>
+        <button id="btnDownloadQuestionsAnki" class="btn btn-outline">🎴 Exportar Anki (.CSV)</button>
+        <button id="btnDownloadStudyGuide" class="btn btn-outline">🧠 Guia de Estudo (.MD)</button>
+        <button id="btnClearQuestions" class="btn btn-danger">🗑️ Limpar Questões</button>
+      </div>
+    </div>
+
+    <!-- 3. QUIZ -->
+    <div class="card">
+      <div class="card-title">🎯 Modo Quiz</div>
+      <div class="card-desc">
+        Treine com as questões capturadas. A resposta correta e a explicação só aparecem depois que você responder.
+      </div>
+
+      <div class="flex-gap">
+        <button id="btnStartQuiz" class="btn btn-success">▶️ Iniciar quiz com as questões filtradas</button>
+        <label class="switch">
+          <input type="checkbox" id="quizShuffle" checked>
+          <span>Embaralhar</span>
+        </label>
+      </div>
+
+      <div id="quizArea" class="quiz-box" style="display: none;">
+        <div class="quiz-progress">
+          <span id="quizProgress">Questão 1</span>
+          <span id="quizScore">Acertos: 0</span>
+        </div>
+        <div id="quizQuestion" class="quiz-question"></div>
+        <div id="quizOptions" class="quiz-options"></div>
+        <div id="quizFeedback" class="quiz-feedback"></div>
+        <div class="flex-gap" style="margin-top: 12px;">
+          <button id="quizNext" class="btn btn-primary btn-sm" style="display: none;">Próxima →</button>
+          <button id="quizRestart" class="btn btn-outline btn-sm">Reiniciar</button>
+        </div>
+        <div id="quizFinal" class="quiz-score" style="display: none;"></div>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="tab-panel" data-tab-panel="ai" hidden>
+
+    <!-- 5. GEMINI -->
+    <div class="card">
+      <div class="card-title">✨ Resumo com Gemini</div>
+      <div class="card-desc">
+        Gere resumos com os modelos do Google AI Studio. Resumos idênticos usam cache local, e falhas temporárias (429/5xx) são repetidas automaticamente.
+      </div>
+
+      <div class="form-group">
+        <label for="apiKey">Chave de API do Google AI Studio:</label>
+        <div style="position: relative;">
+          <input type="password" id="apiKey" placeholder="Cole sua chave AIzaSy...">
+          <button type="button" id="btnToggleApiKey" style="position: absolute; right: 10px; top: 10px; background: transparent; border: none; cursor: pointer; color: var(--text-muted);">👁️</button>
+        </div>
+        <div class="help-text">Pegue sua chave no <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="modelSelect">Modelo Gemini Ativo:</label>
+        <div style="display: flex; gap: 8px;">
+          <select id="modelSelect" style="flex: 1;"></select>
+          <button id="btnRemoveModel" class="btn btn-outline btn-sm" title="Remover modelo selecionado" style="color: var(--danger);">Excluir</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="ocrModelSelect">Modelo Gemini para OCR (Vision):</label>
+        <select id="ocrModelSelect"></select>
+        <div class="help-text">Usado no OCR da região e em imagens coladas no painel. Se vazio, usa o modelo ativo.</div>
+      </div>
+
+      <div class="model-management">
+        <label for="newModelInput" style="font-size: 12px; margin-bottom: 4px;">Adicionar modelo customizado:</label>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="newModelInput" placeholder="Ex: models/gemini-3.5-flash-lite">
+          <button id="btnAddModel" class="btn btn-outline btn-sm">+ Adicionar</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 14px;">
+        <label for="promptCustom">Instruções para o Resumo (Prompt):</label>
+        <textarea id="promptCustom" rows="4" placeholder="Instruções de como a IA deve resumir..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="switch">
+          <input type="checkbox" id="summarizeCourseOnly">
+          <span><b>Resumir apenas o curso selecionado</b> no documento consolidado</span>
+        </label>
+        <label class="switch" style="margin-top: 8px;">
+          <input type="checkbox" id="useSummaryCache" checked>
+          <span><b>Usar cache de resumos</b> para conteúdos idênticos</span>
+        </label>
+      </div>
+
+      <div id="tokenEstimate" class="token-box">Tokens estimados do conteúdo: <b>0</b></div>
+
+      <div class="flex-gap" style="margin-top: 14px;">
+        <button id="btnSaveApi" class="btn btn-outline">Salvar Configurações da IA</button>
+        <button id="btnResetPrompt" class="btn btn-outline">Restaurar Prompt Padrão</button>
+        <button id="btnSummarizeWithGemini" class="btn btn-success">⚡ Gerar Resumo</button>
+      </div>
+
+      <div id="aiLoading" style="display: none; margin-top: 16px; font-weight: 600; color: var(--primary);">
+        ⏳ Enviando para o Gemini... aguarde.
+      </div>
+
+      <hr class="section-sep">
+
+      <div class="form-group" style="margin: 0;">
+        <label>🧪 Diagnóstico do Gemini Vision (OCR)</label>
+        <div class="help-text">
+          Verifica se o modelo ativo aceita imagens e extrai texto. Nada é salvo no histórico.
+        </div>
+        <div id="visionDrop" tabindex="0" style="margin-top: 10px; border: 2px dashed var(--border); border-radius: 10px; padding: 16px; text-align: center; cursor: pointer; color: var(--text-muted);">
+          Clique aqui e cole um print com <b>Ctrl+V</b> (ou arraste uma imagem)
+        </div>
+        <div class="flex-gap" style="margin-top: 10px;">
+          <button id="btnTestVision" class="btn btn-outline btn-sm">🧪 Testar com imagem de exemplo</button>
+          <span id="visionStatus" class="help-text" style="margin: 0;"></span>
+        </div>
+        <div class="help-text" style="margin-top: 8px;">
+          O texto extraído aparece abaixo em um campo editável — corrija erros de OCR manualmente antes de usar.
+        </div>
+        <textarea id="visionResult" rows="8" style="display: none; margin-top: 8px; padding: 12px; border-radius: 8px; background: rgba(127, 127, 127, 0.08); border: 1px solid var(--border); width: 100%; max-height: 320px; overflow: auto; font-family: monospace; font-size: 12px; resize: vertical;"></textarea>
+        <div class="flex-gap" style="margin-top: 8px;">
+          <button id="btnCopyVision" class="btn btn-outline btn-sm" disabled>📋 Copiar texto corrigido</button>
+          <span id="visionCopyStatus" class="help-text" style="margin: 0;"></span>
+        </div>      </div>
+    </div>
+
+    <!-- 6. RESUMOS -->
+    <div class="card">
+      <div class="card-title">🧩 Resumos Gerados pela IA</div>
+      <div class="card-desc">Histórico dos resumos. Busque, apague individualmente ou mescle tudo em um arquivo.</div>
+
+      <div class="stat-bar" style="margin-bottom: 12px;">
+        <div class="stat-item">Resumos: <b id="summariesCount">0</b></div>
+      </div>
+
+      <input type="text" id="summarySearch" placeholder="🔎 Buscar nos resumos..." style="margin-bottom: 12px;">
+
+      <div class="item-list" id="summaryList">
+        <div class="empty-state">Nenhum resumo da IA gerado ainda.</div>
+      </div>
+
+      <div class="flex-gap" style="margin-top: 18px;">
+        <button id="btnMergeSummariesTxt" class="btn btn-primary">📑 Mesclar em .TXT</button>
+        <button id="btnMergeSummariesMd" class="btn btn-outline" style="font-weight: 700;">📑 Mesclar em Markdown (.MD)</button>
+        <button id="btnClearSummaries" class="btn btn-outline" style="color: var(--danger); border-color: var(--danger);">Limpar Resumos</button>
+      </div>
+
+      <hr class="section-sep">
+
+      <div class="form-group" style="margin: 0;">
+        <label for="editSummaries">✏️ Editar Resumos:</label>
+        <div class="help-text" style="margin-bottom: 8px;">Apague um bloco inteiro (ou o texto dele) e clique em Salvar para removê-lo do histórico. As edições substituem o conteúdo original.</div>
+        <textarea id="editSummaries" rows="6" style="font-family: monospace; font-size: 12px;" placeholder="Os resumos aparecerão aqui para edição..."></textarea>
+        <div class="flex-gap" style="margin-top: 8px;">
+          <button id="btnSaveSummariesEdit" class="btn btn-success btn-sm">💾 Salvar Edição</button>
+          <button id="btnResetSummaries" class="btn btn-outline btn-sm">🔄 Recarregar</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="tab-panel" data-tab-panel="settings" hidden>
+
+    <!-- 4. PREFERÊNCIAS -->
+    <div class="card">
+      <div class="card-title">⚙️ Preferências, Pastas e Automação</div>
+      <div class="card-desc">Configure a subpasta de downloads, backups automáticos e capturas opcionais.</div>
+
+      <div class="form-group">
+        <label for="subfolder">Subpasta de Salvamento (dentro de Downloads):</label>
+        <input type="text" id="subfolder" placeholder="Ex: Transcricoes ou Cursos/Notas">
+      </div>
+
+      <div class="form-group">
+        <label for="filename">Nome do Arquivo Acumulador:</label>
+        <input type="text" id="filename" placeholder="Ex: transcricoes_acumuladas.txt">
+      </div>
+
+      <div class="form-group">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="antiDuplicate" checked>
+          <span><b>Anti-Duplicação:</b> evita adicionar a mesma aula/questão duas vezes</span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <input type="checkbox" id="autoCaptureOnNextVideo">
+          <span><b>Captura automática de transcrição</b> ao avançar para uma nova aula em vídeo</span>
+        </label>
+        <div class="help-text">Desativada por padrão. A captura automática não copia para a área de transferência nem clica em botões da página.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="autoBackupEvery">Backup automático a cada N capturas:</label>
+        <input type="number" id="autoBackupEvery" min="0" step="1" placeholder="0 = desativado">
+        <div class="help-text">Gera um .JSON de backup na pasta de downloads a cada N capturas (0 desativa).</div>
+      </div>
+
+      <button id="btnSaveConfig" class="btn btn-primary">Salvar Preferências</button>
+    </div>
+
+    <!-- 7. IMPORTAR / EXPORTAR -->
+    <div class="card">
+      <div class="card-title">💾 Importar / Exportar Dados</div>
+      <div class="card-desc">Backup completo das preferências e do conteúdo (sem a chave de API). A importação também migra dados antigos automaticamente.</div>
+
+      <div class="flex-gap" style="margin-top: 18px;">
+        <button id="btnExportConfig" class="btn btn-outline">📤 Exportar Backup (.JSON)</button>
+        <button id="btnImportConfig" class="btn btn-outline">📥 Importar Backup (.JSON)</button>
+        <input type="file" id="fileImportConfig" accept=".json" style="display: none;">
+      </div>
+      <div class="help-text">Conteúdos grandes são comprimidos e, acima de 2 MB, migrados para IndexedDB automaticamente.</div>
+    </div>
+
+    <!-- 8. ZONA DE PERIGO -->
+    <div class="card danger-card">
+      <div class="card-title">⚠️ Recomeçar do zero</div>
+      <div class="card-desc">
+        Apaga permanentemente <b>todas as transcrições, questões, resumos, cursos e caches</b>. Preferências, chave de API e modelos são mantidos.
+        Use quando for começar um curso novo e não quiser vestígios dos anteriores.
+      </div>
+      <button id="btnClearAll" class="btn btn-danger">🗑️ Limpar tudo e começar um novo curso</button>
+    </div>
+
+    </div>
+  </div>
+
+  <script src="lz-string.min.js"></script>
+  <script src="storage-utils.js"></script>
+  <script src="gemini-client.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
