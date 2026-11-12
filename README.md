@@ -2,7 +2,7 @@
 
 Extensão Chrome (Manifest V3) para capturar transcrições e questões de **qualquer página**, organizar o conteúdo por curso, praticar com quiz e gerar resumos com o Gemini.
 
-> Versão atual: **2.15.0**
+> Versão atual: **2.15.1**
 
 ## Recursos
 

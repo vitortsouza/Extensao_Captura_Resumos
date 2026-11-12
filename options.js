@@ -1,4 +1,4 @@
-// options.js - Controlador da página de configurações v2.15.0
+// options.js - Controlador da página de configurações v2.15.1
 /* global AluraStore, LZString */
 
 const DEFAULT_PROMPT =

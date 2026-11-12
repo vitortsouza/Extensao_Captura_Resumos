@@ -1,4 +1,4 @@
-// background.js - Service Worker da Extensão Captura e Resumos Pro v2.15.0
+// background.js - Service Worker da Extensão Captura e Resumos Pro v2.15.1
 importScripts("lz-string.min.js", "storage-utils.js", "gemini-client.js");
 
 const DEFAULT_PROMPT =
@@ -807,9 +807,10 @@ async function handleStoreTranscript(request, sender) {
     )
   );
 
-  if (store.antiDuplicate !== false && (savedTitles.some((t) => String(t).trim().toLowerCase() === normalizedTitle) || courseLessonExists)) {
+  // Anti-duplicação por curso: o mesmo título em cursos diferentes é permitido.
+  if (store.antiDuplicate !== false && courseLessonExists) {
     badge(sender, "DUPL", "#f59e0b");
-    return { success: true, isDuplicate: true, totalCount: savedTitles.length };
+    return { success: true, isDuplicate: true, totalCount: countLessons(courses) };
   }
 
   let currentContent = store.rawContent || "";
@@ -846,7 +847,14 @@ async function handleStoreTranscript(request, sender) {
   badge(sender, "OK", "#10b981");
   await maybeAutoBackup(captureCount, store.autoBackupEvery);
 
-  return { success: true, isDuplicate: false, totalCount: savedTitles.length };
+  return { success: true, isDuplicate: false, totalCount: countLessons(courses) };
+}
+
+function countLessons(courses) {
+  return Object.values(courses || {}).reduce(
+    (total, course) => total + (Array.isArray(course?.lessons) ? course.lessons.length : 0),
+    0
+  );
 }
 
 // ---------- questões ----------

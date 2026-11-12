@@ -1,6 +1,6 @@
 {
   "name": "captura-resumos-pro",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "private": true,
   "description": "Captura transcrições e questões de qualquer página, com quiz, Anki, OCR e resumos Gemini.",
   "scripts": {

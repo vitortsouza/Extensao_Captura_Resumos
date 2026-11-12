@@ -35,11 +35,12 @@
 
     const style = window.getComputedStyle(el);
     if (!style) return false;
+    const opacity = String(style.opacity || "").trim();
     return (
       style.display === "none" ||
       style.visibility === "hidden" ||
       style.visibility === "collapse" ||
-      Number(style.opacity) === 0
+      (opacity !== "" && Number(opacity) === 0)
     );
   }
 

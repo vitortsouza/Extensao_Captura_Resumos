@@ -77,6 +77,29 @@ async function storeQuestion(courseName, id) {
   assert.strictEqual(github.name, 'Practice-Exam-1122-26-OCI-AI-Foundations-Associate');
   console.log('✓ nomes de curso normalizados na captura (Course: e GitHub)');
 
+  // mesmo título em cursos diferentes deve ser salvo nos dois
+  await storeTranscript('Curso X', 'Aula Compartilhada');
+  await storeTranscript('Curso Y', 'Aula Compartilhada');
+
+  courses = Object.values((await AluraStore.get(['courses'])).courses || {});
+  const cursoX = courses.find((c) => c.name === 'Curso X');
+  const cursoY = courses.find((c) => c.name === 'Curso Y');
+  assert.ok(cursoX && cursoX.lessons.some((l) => l.title === 'Aula Compartilhada'), 'aula salva no curso X');
+  assert.ok(cursoY && cursoY.lessons.some((l) => l.title === 'Aula Compartilhada'), 'aula salva no curso Y');
+  console.log('✓ mesmo título em cursos diferentes não é bloqueado');
+
+  // duplicata dentro do mesmo curso continua bloqueada
+  const duplicate = await send({
+    action: 'storeTranscript',
+    title: 'Aula Compartilhada',
+    transcript: 'texto repetido',
+    formattedText: '[Titulo] Aula Compartilhada\n\n[Texto] texto repetido',
+    courseName: 'Curso X',
+    sourceType: 'selection'
+  });
+  assert.strictEqual(duplicate.isDuplicate, true, 'duplicata no mesmo curso é bloqueada');
+  console.log('✓ duplicata no mesmo curso continua bloqueada');
+
   // normalizeCourses une duplicados antigos
   await AluraStore.set({
     courses: {

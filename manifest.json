@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Captura e Resumos Pro",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "description": "Captura transcrições e questões de qualquer página, por seleção ou região, com quiz, Anki, OCR e resumos Gemini.",
   "permissions": [
     "activeTab",
